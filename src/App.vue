@@ -1,83 +1,69 @@
 <script setup>
-import { ref, computed } from 'vue'
-
-const ds = ref(0)
-const tp = ref(0)
-const ex = ref(0)
-
-const moyenne = computed(() => {
-  return ((Number(ds.value) + Number(tp.value) + Number(ex.value)) / 3).toFixed(2)
-})
-
-const mention = computed(() => {
-  const m = parseFloat(moyenne.value)
-  if (m >= 16) return 'Très Bien'
-  if (m >= 14) return 'Bien'
-  if (m >= 12) return 'Assez Bien'
-  if (m >= 10) return 'Passable'
-  return 'Insuffisant'
-})
+import { ref } from 'vue'
+import CalculMoyenne from './components/CalculMoyenne.vue'
+import Compteur from './components/Compteur.vue'
+const exerciceActif = ref('moyenne')
 </script>
-
 <template>
-  <div class="container">
-    <h1>Calcul de Moyenne</h1>
-
-    <div class="form-group">
-      <label>Note DS :</label>
-      <input type="number" v-model="ds" min="0" max="20" step="0.25" />
+  <main class="main-container">
+    <h1>Mes Exercices Vue.js</h1>
+    <nav class="menu">
+      <button 
+        @click="exerciceActif = 'moyenne'" 
+        :class="{ active: exerciceActif === 'moyenne' }"
+      >
+        Exercice 1 : Calcul Moyenne
+      </button>
+      <button 
+        @click="exerciceActif = 'compteur'" 
+        :class="{ active: exerciceActif === 'compteur' }"
+      >
+        Exercice 2 : Compteur
+      </button>
+    </nav>
+    <div class="content">
+      <CalculMoyenne v-if="exerciceActif === 'moyenne'" />
+      <Compteur v-if="exerciceActif === 'compteur'" />
     </div>
-
-    <div class="form-group">
-      <label>Note TP :</label>
-      <input type="number" v-model="tp" min="0" max="20" step="0.25" />
-    </div>
-
-    <div class="form-group">
-      <label>Note EX :</label>
-      <input type="number" v-model="ex" min="0" max="20" step="0.25" />
-    </div>
-
-    <div class="result">
-      <p><strong>Moyenne :</strong> {{ moyenne }} / 20</p>
-      <p><strong>Mention :</strong> {{ mention }}</p>
-    </div>
-  </div>
+  </main>
 </template>
 
-<style scoped>
-.container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+<style>
+body {
   font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 20px;
+}
+.main-container {
+  max-width: 600px;
+  margin: 0 auto;
   text-align: center;
 }
-
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
+.menu {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
+.menu button {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #42b883;
+  background-color: white;
+  color: #42b883;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.menu button.active {
+  background-color: #42b883;
+  color: white;
   font-weight: bold;
 }
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-.result {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f0f0f0;
-  border-radius: 6px;
-  color: #000;
+.menu button:hover {
+  background-color: #35495e;
+  color: white;
+  border-color: #35495e;
 }
 </style>
